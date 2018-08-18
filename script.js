@@ -11,26 +11,32 @@ const uncheckedCountSpan = document.getElementById('unchecked-count')
 
 function newTodo() {
   let todo = document.createElement('LI')
+
   todo.setAttribute('class', classNames.TODO_ITEM)
   todo.textContent = 'This is a new todo.'
   todo.appendChild(addCheckbox())
   todo.appendChild(addDeleteButton())
   list.appendChild(todo)
-  updateItemCount(list.childElementCount)
+
+  updateItemCount()
   updateUncheckedCount()
 }
 
+
 function addCheckbox() {
-  let checkbox = document.createElement('INPUT');
-  checkbox.setAttribute('type', 'checkbox');
+  let checkbox = document.createElement('INPUT')
+
+  checkbox.setAttribute('type', 'checkbox')
   checkbox.setAttribute('class', classNames.TODO_CHECKBOX)
   checkbox.setAttribute('onchange', 'updateUncheckedCount(this.checked)')
 
   return checkbox
 }
 
+
 function addDeleteButton() {
   let deleteButton = document.createElement('BUTTON')
+
   deleteButton.setAttribute('class', classNames.TODO_DELETE)
   deleteButton.setAttribute('onClick', 'deleteTodo(this.parentNode)')
   deleteButton.textContent = 'Delete'
@@ -38,25 +44,31 @@ function addDeleteButton() {
   return deleteButton
 }
 
+
 function deleteTodo(todo) {
-  let isChecked = todo.getElementsByClassName(classNames.TODO_CHECKBOX)[0].checked
-  if (!isChecked) {
-    updateUncheckedCount(!isChecked)
-  }
   list.removeChild(todo)
-  updateItemCount(list.childElementCount)
+
+  // updates unchecked count only if todo checkbox is not checked
+  if (!todo.getElementsByClassName(classNames.TODO_CHECKBOX)[0].checked) {
+    updateUncheckedCount(true)
+  }
+  updateItemCount()
 }
 
-function updateItemCount(adjustment) {
-  itemCountSpan.textContent = adjustment
-}
 
 function updateUncheckedCount(isChecked) {
   let uncheckedCount = uncheckedCountSpan.innerText
+
   if (isChecked) {
     uncheckedCount--
   } else {
     uncheckedCount++
   }
+
   uncheckedCountSpan.textContent = uncheckedCount
+}
+
+
+function updateItemCount() {
+  itemCountSpan.textContent = list.childElementCount
 }
